@@ -9,17 +9,15 @@ function generateVCF() {
   }
 
   const baseName = contactInput || fileInput;
-  const lines = numbersInput.split("\n");
-  let vcfContent = "";
-  let index = 1;
+  const lines = numbersInput.split(/\r?\n/);
+  let vcf = "";
+  let count = 1;
 
   lines.forEach(line => {
-    // Ambil angka saja
     let num = line.replace(/\D/g, "");
 
     if (num.length < 10) return;
 
-    // Normalisasi awalan
     if (num.startsWith("0")) {
       num = "62" + num.slice(1);
     }
@@ -27,12 +25,10 @@ function generateVCF() {
     if (!num.startsWith("62")) return;
 
     const finalNumber = "+" + num;
-
-    // Nomor urut 01, 02, dst
-    const order = index < 10 ? "0" + index : index;
+    const order = count < 10 ? "0" + count : count;
     const contactName = `${baseName} ${order}`;
 
-    vcfContent +=
+    vcf +=
 `BEGIN:VCARD
 VERSION:3.0
 FN:${contactName}
@@ -40,22 +36,23 @@ TEL:${finalNumber}
 END:VCARD
 `;
 
-    index++;
+    count++;
   });
 
-  if (!vcfContent) {
+  if (!vcf) {
     alert("Tidak ada nomor valid");
     return;
   }
 
-  // Download file
-  const blob = new Blob([vcfContent], { type: "text/vcard" });
-  const url = URL.createObjectURL(blob);
+  const blob = new Blob([vcf], { type: "text/vcard;charset=utf-8;" });
+  const link = document.createElement("a");
 
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = fileInput + ".vcf";
-  a.click();
+  link.href = URL.createObjectURL(blob);
+  link.download = fileInput + ".vcf";
 
-  URL.revokeObjectURL(url);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(link.href);
 }
