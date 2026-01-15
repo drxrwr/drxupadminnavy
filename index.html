@@ -2,13 +2,14 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TXT ke VCF</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
-  <h2>TXT ke VCF Generator</h2>
+  <h2>TXT ke VCF</h2>
 
   <label>Nama Kontak (opsional)</label>
   <input type="text" id="contactName" placeholder="Contoh: Admin">
@@ -17,9 +18,9 @@
   <input type="text" id="fileName" placeholder="Contoh: kontak-admin">
 
   <label>Nomor (1 baris 1 nomor)</label>
-  <textarea id="numbers" placeholder="+62 857-1902-6130&#10;0857-1902-6130&#10;wa: 6285719026130"></textarea>
+  <textarea id="numbers" placeholder="+62 857-1902-6130&#10;0857-1902-6130"></textarea>
 
-  <button onclick="generateVCF()">Download VCF</button>
+  <button id="downloadBtn" onclick="generateVCF()">Download VCF</button>
 </div>
 
 <script src="script.js"></script>
