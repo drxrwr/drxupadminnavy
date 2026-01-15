@@ -45,14 +45,22 @@ END:VCARD
   }
 
   const blob = new Blob([vcf], { type: "text/vcard;charset=utf-8;" });
-  const link = document.createElement("a");
+  const url = URL.createObjectURL(blob);
 
-  link.href = URL.createObjectURL(blob);
-  link.download = fileInput + ".vcf";
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  if (isMobile) {
+    // HP: buka file (import kontak)
+    window.open(url, "_blank");
+  } else {
+    // PC: download otomatis
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileInput + ".vcf";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
 
-  URL.revokeObjectURL(link.href);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
